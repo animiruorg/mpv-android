@@ -76,6 +76,13 @@ fi
 # libplacebo
 [ ! -d libplacebo ] && git clone --depth 1 --recursive https://github.com/haasn/libplacebo
 
+# curl
+if [ ! -d curl ]; then
+	mkdir curl
+	$WGET https://curl.se/download/curl-$v_curl.tar.gz -O - | \
+		tar -xz -C curl --strip-components=1
+fi
+
 # mpv
 [ ! -d mpv ] && git clone --depth 1 https://github.com/mpv-player/mpv
 

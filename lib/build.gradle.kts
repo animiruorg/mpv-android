@@ -16,7 +16,7 @@ group = "io.github.secozzi"
 android {
     namespace = "is.xyz.mpv"
     compileSdk = 36
-    defaultConfig { minSdk = 21 }
+    defaultConfig { minSdk = 23 }
 
     buildFeatures {
         buildConfig = true

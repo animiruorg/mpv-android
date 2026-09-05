@@ -33,6 +33,7 @@ extern "C" {
 JavaVM *g_vm;
 
 static bool environment_prepared = false;
+static jobject global_appctx;
 
 static void prepare_environment(JNIEnv *env, jobject appctx) {
     if (environment_prepared)
@@ -40,10 +41,15 @@ static void prepare_environment(JNIEnv *env, jobject appctx) {
 
     setlocale(LC_NUMERIC, "C");
 
-    if (!env->GetJavaVM(&g_vm) && g_vm)
-        av_jni_set_java_vm(g_vm, NULL);
+    g_vm = NULL;
+    env->GetJavaVM(&g_vm);
+    if (!g_vm)
+        die("failed to get jvm");
+    av_jni_set_java_vm(g_vm, NULL);
 
-    jobject global_appctx = env->NewGlobalRef(appctx);
+    if (global_appctx)
+        env->DeleteGlobalRef(global_appctx);
+    global_appctx = env->NewGlobalRef(appctx);
     if (global_appctx)
         av_jni_set_android_app_ctx(global_appctx, NULL);
 

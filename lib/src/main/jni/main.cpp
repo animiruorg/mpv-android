@@ -117,22 +117,22 @@ jni_func(void, command, jobjectArray jarray) {
     MpvContext *ctx = get_context(env, obj);
     CHECK_CTX(ctx);
 
-    const char *arguments[128] = {0};
-    jstring jstrings[128] = {0};
-    int len = env->GetArrayLength(jarray);
-    if (len >= ARRAYLEN(arguments))
+    jstring strings[64] = {0};
+    const char *arguments[64] = {0};
+    jsize len = env->GetArrayLength(jarray);
+    if (len >= ARRAYLEN(arguments)) // null-terminated
         die("too many command arguments");
 
-    for (int i = 0; i < len; ++i) {
-        jstrings[i] = (jstring)env->GetObjectArrayElement(jarray, i);
-        arguments[i] = env->GetStringUTFChars(jstrings[i], NULL);
+    for (jsize i = 0; i < len; ++i) {
+        strings[i] = (jstring)env->GetObjectArrayElement(jarray, i);
+        arguments[i] = env->GetStringUTFChars(strings[i], NULL);
     }
 
     mpv_command(ctx->mpv, arguments);
 
-    for (int i = 0; i < len; ++i) {
-        env->ReleaseStringUTFChars(jstrings[i], arguments[i]);
-        env->DeleteLocalRef(jstrings[i]);
+    for (jsize i = 0; i < len; ++i) {
+        env->ReleaseStringUTFChars(strings[i], arguments[i]);
+        env->DeleteLocalRef(strings[i]);
     }
 }
 

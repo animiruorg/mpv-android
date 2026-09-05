@@ -42,10 +42,10 @@ PREFIX32="$prefix32" PREFIX64="$prefix64" PREFIX_X64="$prefix_x64" PREFIX_X86="$
 ndk-build -C lib/src/main -j$cores
 
 ### Java prts
-targets=(assembleDebug)
+targets=(:lib:assembleDebug)
 if [ -z "$DONT_BUILD_RELEASE" ]; then
-	targets+=(assembleRelease)
-	[ -n "$BUNDLE" ] && targets+=(bundleRelease)
+	targets+=(:lib:assembleRelease)
+	[ -n "$BUNDLE" ] && targets+=(:lib:bundleRelease)
 fi
 ./gradlew "${targets[@]}"
 

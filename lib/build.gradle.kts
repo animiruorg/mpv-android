@@ -3,12 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 val abiCodes = mapOf("armeabi-v7a" to 1, "arm64-v8a" to 2, "x86" to 3, "x86_64" to 4)
 val universalBase = 8000
 
-version = "0.1.14"
+version = "0.1.15"
 group = "io.github.secozzi"
 
 android {

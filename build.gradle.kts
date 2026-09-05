@@ -11,6 +11,10 @@ buildscript {
     }
 }
 
+plugins {
+    id("com.vanniktech.maven.publish") version "0.32.0"
+}
+
 allprojects {
     repositories {
         mavenCentral()

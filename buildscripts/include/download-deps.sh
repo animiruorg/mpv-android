@@ -20,9 +20,9 @@ fi
 # ffmpeg
 if [ ! -d ffmpeg ]; then
     git clone --branch $v_ffmpeg --depth 1 https://github.com/FFmpeg/FFmpeg ffmpeg
-    cd ffmpeg
-    git apply ../../patches/ffmpeg_force_mpegts.patch
-    cd ..
+    #cd ffmpeg
+    #git apply ../../patches/ffmpeg_force_mpegts.patch
+    #cd ..
 fi
 
 # freetype2
@@ -75,6 +75,14 @@ fi
 
 # libplacebo
 [ ! -d libplacebo ] && git clone --depth 1 --recursive https://github.com/haasn/libplacebo
+
+
+# nghttp2 (HTTP/2 support for curl)
+if [ ! -d nghttp2 ]; then
+	mkdir nghttp2
+	$WGET https://github.com/nghttp2/nghttp2/releases/download/v$v_nghttp2/nghttp2-$v_nghttp2.tar.xz -O - | \
+		tar -xJ -C nghttp2 --strip-components=1
+fi
 
 # curl
 if [ ! -d curl ]; then

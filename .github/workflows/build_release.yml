@@ -1,24 +1,24 @@
-name: CI
+name: Release
+
+permissions:
+  contents: write
 
 on:
   push:
     tags:
       - '*'
 
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          java-version: '17'
+          fetch-depth: 0
+
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          java-version: '21'
           distribution: temurin
 
       - name: Export env vars
@@ -42,25 +42,39 @@ jobs:
           ./buildall.sh
         env:
           GRADLE_OPTS: -Xmx4G
-      - name: Get tag name
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          set -x
-          echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
       - name: Copy build artifacts
-        if: startsWith(github.ref, 'refs/tags/')
         run: |
           set -e
-          mv lib/build/outputs/aar/lib-release.aar mpv-android-lib-${{ env.VERSION_TAG }}.aar
+          mv lib/build/outputs/aar/lib-release.aar mpv-android-lib-${{ github.ref_name }}.aar
+
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          tag_name: ${{ env.VERSION_TAG }}
-          name: mpv-android-lib ${{ env.VERSION_TAG }}
+          tag_name: ${{ github.ref_name }}
+          name: mpv-android-lib ${{ github.ref_name }}
           body: |
-            library version ${{ env.VERSION_TAG }}
+            library version ${{ github.ref_name }}
           files: |
-            mpv-android-lib-${{ env.VERSION_TAG }}.aar
+            mpv-android-lib-${{ github.ref_name }}.aar
           draft: true
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Release
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY_BASE64 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        run: |
+          echo "$SIGNING_KEY" | base64 -d > /tmp/keyring.gpg
+          ./gradlew publishAllPublicationsToMavenCentralRepository \
+            -Psigning.secretKeyRingFile=/tmp/keyring.gpg \
+            -Psigning.password="$SIGNING_PASSWORD" \
+            -Psigning.keyId="$SIGNING_KEY_ID" \
+            -PmavenCentralUsername="$MAVEN_CENTRAL_USERNAME" \
+            -PmavenCentralPassword="$MAVEN_CENTRAL_PASSWORD"
+          rm -f /tmp/keyring.gpg

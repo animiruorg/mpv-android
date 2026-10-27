@@ -11,8 +11,6 @@ else
 	exit 255
 fi
 
-exit 0
-
 mkdir -p _build$ndk_suffix
 cd _build$ndk_suffix
 

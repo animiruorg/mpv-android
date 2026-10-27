@@ -37,7 +37,6 @@ android {
                    "**/libavutil.so",
                    "**/libswresample.so",
                    "**/libswscale.so",
-                   "**/libc++_shared.so",
                )
             )
         }

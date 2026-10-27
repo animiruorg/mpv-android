@@ -10,13 +10,13 @@ plugins {
 val abiCodes = mapOf("armeabi-v7a" to 1, "arm64-v8a" to 2, "x86" to 3, "x86_64" to 4)
 val universalBase = 8000
 
-version = "0.1.14"
-group = "io.github.secozzi"
+version = "0.1.15"
+group = "io.github.animiruorg"
 
 android {
     namespace = "is.xyz.mpv"
     compileSdk = 36
-    defaultConfig { minSdk = 21 }
+    defaultConfig { minSdk = 23 }
 
     buildFeatures {
         buildConfig = true
@@ -38,7 +38,6 @@ android {
                    "**/libavutil.so",
                    "**/libswresample.so",
                    "**/libswscale.so",
-                   "**/libc++_shared.so",
                )
             )
         }
@@ -68,9 +67,9 @@ mavenPublishing {
     )
     pom {
         name.set("mpv Android library")
-        description.set("The mpv library used by mpvKt.")
-        inceptionYear.set("2024")
-        url.set("https://github.com/Secozzi/mpv-android/")
+        description.set("The mpv library used by Animiru.")
+        inceptionYear.set("2026")
+        url.set("https://github.com/animiruorg/mpv-android/")
         licenses {
             license {
                 name.set("MIT License")
@@ -80,16 +79,15 @@ mavenPublishing {
         }
         developers {
             developer {
-                id.set("Secozzi")
-                name.set("Secozzi")
-                url.set("https://github.com/Secozzi/")
+                id.set("animiruorg")
+                name.set("Animiru Org")
+                url.set("https://github.com/animiruorg/")
             }
         }
         scm {
-            url.set("https://github.com/Secozzi/mpv-android/")
-            connection.set("scm:git:git://github.com/Secozzi/mpv-android.git")
-            developerConnection.set("scm:git:ssh://git@github.com/Secozzi/mpv-android.git")
+            url.set("https://github.com/animiruorg/mpv-android/")
+            connection.set("scm:git:git://github.com/animiruorg/mpv-android.git")
+            developerConnection.set("scm:git:ssh://git@github.com/animiruorg/mpv-android.git")
         }
     }
 }
-

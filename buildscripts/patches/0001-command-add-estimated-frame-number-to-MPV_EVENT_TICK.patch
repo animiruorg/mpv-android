@@ -1,0 +1,26 @@
+From 3de0b1b50ecd6cf3646bf80cc3e239fe3c7f8e89 Mon Sep 17 00:00:00 2001
+From: Abdallah Mehiz <abdallahmehiz0@gmail.com>
+Date: Sat, 14 Nov 2026 17:28:27 +0100
+Subject: [PATCH] command: add `estimated-frame-number` to `MPV_EVENT_TICK`'s
+ observed properties
+
+---
+ player/command.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/player/command.c b/player/command.c
+index 516e648142..d97d083a8d 100644
+--- a/player/command.c
++++ b/player/command.c
+@@ -4933,7 +4933,7 @@ static const char *const *const mp_event_property_change[] = {
+     E(MP_EVENT_TRACKS_CHANGED, "track-list", "current-tracks"),
+     E(MP_EVENT_TRACK_SWITCHED, "track-list", "current-tracks"),
+     E(MPV_EVENT_IDLE, "*"),
+-    E(MPV_EVENT_TICK, "time-pos", "audio-pts", "stream-pos", "avsync",
++    E(MPV_EVENT_TICK, "time-pos", "estimated-frame-number", "audio-pts", "stream-pos", "avsync",
+       "percent-pos", "time-remaining", "playtime-remaining", "playback-time",
+       "estimated-vf-fps", "total-avsync-change", "audio-speed-correction",
+       "video-speed-correction", "vo-delayed-frame-count", "mistimed-frame-count",
+-- 
+2.56.0
+

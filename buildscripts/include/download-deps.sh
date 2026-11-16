@@ -92,6 +92,12 @@ if [ ! -d curl ]; then
 fi
 
 # mpv
-[ ! -d mpv ] && git clone --depth 1 https://github.com/mpv-player/mpv
+if [ ! -d mpv ]; then
+  git clone --depth 1 https://github.com/mpv-player/mpv
+
+  cd mpv
+  git apply ../../patches/0001-command-add-estimated-frame-number-to-MPV_EVENT_TICK.patch
+  cd ..
+fi
 
 cd ..
